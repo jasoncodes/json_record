@@ -56,14 +56,14 @@ describe JsonRecord::Serialized do
   
   it "should convert values to times" do
     model = JsonRecord::Test::Model.new
-    model.verified_at = "2010-01-25T12:00:15-6:00"
-    model.verified_at.should == Time.parse("2010-01-25T12:00:15-6:00").utc
+    model.verified_at = "2010-01-25T12:00:15-06:00"
+    model.verified_at.should == Time.parse("2010-01-25T12:00:15-06:00").utc
   end
   
   it "should convert values to datetimes" do
     model = JsonRecord::Test::Model.new
-    model.viewed_at = "2010-01-25T12:00:15-6:00"
-    model.viewed_at.should == Time.parse("2010-01-25T12:00:15-6:00").utc
+    model.viewed_at = "2010-01-25T12:00:15-06:00"
+    model.viewed_at.should == Time.parse("2010-01-25T12:00:15-06:00").utc
   end
   
   it "should convert values to booleans" do
