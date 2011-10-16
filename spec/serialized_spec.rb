@@ -459,10 +459,15 @@ describe JsonRecord::Serialized do
     subtrait = trait.sub_traits.build(:name => "s1", :count => "plaid")
     model.valid?.should == false
     model.errors[:primary_trait].should_not be_blank
+    model.errors[:'primary_trait.name'].should_not be_blank
     model.errors[:traits].should_not be_blank
+    model.errors[:'traits.name'].should_not be_blank
+    model.errors[:'traits.value'].should be_blank
     model.primary_trait.errors[:name].should_not be_blank
     trait.errors[:name].should_not be_blank
     trait.errors[:sub_traits].should_not be_blank
+    trait.errors[:'sub_traits.count'].should_not be_blank
+    model.errors[:'traits.sub_traits.count'].should_not be_blank
     subtrait.errors[:count].should_not be_blank
     
     model.primary_trait.name = "p1"
@@ -470,10 +475,12 @@ describe JsonRecord::Serialized do
     subtrait.count = 1
     model.valid?.should == true
     model.errors[:primary_trait].should be_blank
+    model.errors[:'primary_trait.name'].should be_blank
     model.errors[:traits].should be_blank
     model.primary_trait.errors[:name].should be_blank
     trait.errors[:name].should be_blank
     trait.errors[:sub_traits].should be_blank
+    model.errors[:'traits.sub_traits.count'].should be_blank
     subtrait.errors[:count].should be_blank
   end
   

@@ -95,11 +95,23 @@ module JsonRecord
       if field.multivalued?
         @klass.validates_each(field.name) do |record, name, value|
           record.errors.add(name, :invalid) unless value.all?{|v| v.valid?}
+          value.reject(&:valid?).each do |v|
+            v.errors.each do |attribute, message|
+              attribute = "#{name}.#{attribute}"
+              record.errors[attribute] << message
+              record.errors[attribute].uniq!
+            end
+          end
         end
       elsif field.type < EmbeddedDocument
         @klass.validates_each(field.name) do |record, name, value|
-          if value.is_a?(field.type)
-            record.errors.add(name, :invalid) unless value.valid?
+          if value.is_a?(field.type) && !value.valid?
+            record.errors.add(name, :invalid)
+            value.errors.each do |attribute, message|
+              attribute = "#{name}.#{attribute}"
+              record.errors[attribute] << message
+              record.errors[attribute].uniq!
+            end
           end
         end
       end
