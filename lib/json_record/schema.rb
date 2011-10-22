@@ -62,7 +62,14 @@ module JsonRecord
     private
     
     def add_json_validations (field, options) #:nodoc:
-      @klass.validates_presence_of(field.name) if options[:required]
+      if options[:required]
+        if field.type == Boolean
+          @klass.validates_inclusion_of field.name, :in => [true, false], :message => I18n.t('errors.messages.blank')
+        else
+          @klass.validates_presence_of field.name
+        end
+      end
+      
       @klass.validates_format_of(field.name, :with => options[:format], :allow_blank => true) if options[:format]
       
       if options[:length]

@@ -99,5 +99,13 @@ module JsonRecord
         schema.key :value, String
       end
     end
+
+    class RequiredBoolean < ActiveRecord::Base
+      set_table_name :models
+      
+      serialize_to_json(:json) do |schema|
+        schema.key :verified, Boolean, :required => true
+      end
+    end
   end
 end

@@ -287,9 +287,19 @@ describe JsonRecord::Serialized do
   it "should validate the presence of a json attribute" do
     model = JsonRecord::Test::Model.new
     model.valid?.should == false
-    model.errors[:name].should_not be_blank
+    model.errors[:name].should == [I18n.t('errors.messages.blank')]
     model.name = "woo"
     model.valid?.should == true
+  end
+  
+  it "should validate true and false booleans as present" do
+    model = JsonRecord::Test::RequiredBoolean.new
+    model.should_not be_valid
+    model.errors[:verified].should == [I18n.t('errors.messages.blank')]
+    model.verified = true
+    model.should be_valid
+    model.verified = false
+    model.should be_valid
   end
   
   it "should validate the length of a json attribute" do
