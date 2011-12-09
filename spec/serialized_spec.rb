@@ -212,6 +212,20 @@ describe JsonRecord::Serialized do
     model = JsonRecord::Test::Model.find(model.id)
     ActiveSupport::JSON.decode(model.json).should == {"name" => "test name", "value" => 2}
   end
+
+  it "should reserialize true booleans in a JSON field" do
+    model = JsonRecord::Test::Model.new(:name => "test name", :verified => true)
+    model.save!
+    model = JsonRecord::Test::Model.find(model.id)
+    ActiveSupport::JSON.decode(model.json)['verified'].should == true
+  end
+
+  it "should reserialize false booleans in a JSON field" do
+    model = JsonRecord::Test::Model.new(:name => "test name", :verified => false)
+    model.save!
+    model = JsonRecord::Test::Model.find(model.id)
+    ActiveSupport::JSON.decode(model.json)['verified'].should == false
+  end
   
   it "should keep undefined keys found in the JSON field" do
     model = JsonRecord::Test::Model.new(:json => '{"name": "test name", "value": 1, "unknown": "my value", "other stuff": {"value": 2}, "primary_trait": {"name": "n1", "stuff": true}}')

@@ -17,7 +17,7 @@ module JsonRecord
     def serialize
       if @attributes
         stripped_attributes = {}
-        @attributes.each_pair{|k, v| stripped_attributes[k] = v unless v.blank?}
+        @attributes.each_pair{|k, v| stripped_attributes[k] = v unless v.blank? && v != false}
         json = stripped_attributes.to_json
         json = Zlib::Deflate.deflate(json) if json and @compressed
         @record[@name] = json
