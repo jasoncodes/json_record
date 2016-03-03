@@ -35,10 +35,11 @@ module JsonRecord
       unless @record[@name].blank?
         json = @record[@name]
         json = Zlib::Inflate.inflate(json) if @compressed
+        json = ActiveSupport::JSON.decode(json) if json.is_a? String
         do_not_track_changes = Thread.current[:do_not_track_json_field_changes]
         Thread.current[:do_not_track_json_field_changes] = true
         begin
-          ActiveSupport::JSON.decode(json).each_pair do |attr_name, attr_value|
+          json.each_pair do |attr_name, attr_value|
             setter = "#{attr_name}=".to_sym
             if @record.respond_to?(setter)
               @record.send(setter, attr_value)
