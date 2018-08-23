@@ -40,7 +40,7 @@ module JsonRecord
     # the original value will be returned. Blank values are always translated to nil. Hashes will be converted
     # to EmbeddedDocument objects if the field type extends from EmbeddedDocument.
     def convert (val)
-      return nil if val.blank? and val != false
+      return nil if val.blank? and val != false and val != []
       if @type == String
         return val.to_s
       elsif @type == Integer
