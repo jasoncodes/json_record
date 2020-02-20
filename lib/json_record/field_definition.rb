@@ -79,7 +79,7 @@ module JsonRecord
         raise ArgumentError.new("#{name} must be a Hash") unless val.is_a?(Hash)
         return val
       elsif @type == BigDecimal
-      	return BigDecimal.new(val.to_s)
+      	return BigDecimal(val.to_s)
       else
         if val.is_a?(@type)
           val

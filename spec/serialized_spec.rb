@@ -97,7 +97,7 @@ describe JsonRecord::Serialized do
   it "should convert values to BigDecimal" do
     model = JsonRecord::Test::Model.new
     model.price = '5.55'
-    model.price.should == BigDecimal.new('5.55')
+    model.price.should == BigDecimal('5.55')
   end
   
   it "should convert a hash to an embedded document" do
