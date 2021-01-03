@@ -18,8 +18,12 @@ module JsonRecord
       if @attributes
         stripped_attributes = {}
         @attributes.each_pair{|k, v| stripped_attributes[k] = v unless v.blank? && v != false}
-        json = stripped_attributes.to_json
-        json = Zlib::Deflate.deflate(json) if json and @compressed
+        if @record.respond_to?(:column_for_attribute) && @record.column_for_attribute(@name).type == :json
+          json = stripped_attributes
+        else
+          json = stripped_attributes.to_json
+          json = Zlib::Deflate.deflate(json) if json and @compressed
+        end
         @record[@name] = json
       end
     end
